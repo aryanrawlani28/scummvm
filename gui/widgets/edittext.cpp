@@ -55,6 +55,10 @@ EditTextWidget::EditTextWidget(GuiObject *boss, const String &name, const String
 void EditTextWidget::setEditString(const String &str) {
 	EditableWidget::setEditString(str);
 	_backupString = str;
+
+	if (str.equals(""))
+		_editScrollOffset = 0;
+
 }
 
 void EditTextWidget::reflowLayout() {
@@ -74,6 +78,10 @@ void EditTextWidget::handleMouseDown(int x, int y, int button, int clickCount) {
 
 	x += _editScrollOffset;
 
+	if (g_gui.useRTL()) {
+		x = g_gui.getStringWidth(_editString) - x + 14;
+	}
+
 	int width = 0;
 	uint i;
 
@@ -85,7 +93,10 @@ void EditTextWidget::handleMouseDown(int x, int y, int button, int clickCount) {
 			break;
 		last = cur;
 	}
+
 	if (setCaretPos(i))
+		markAsDirty();
+	else if (g_gui.useRTL())
 		markAsDirty();
 }
 
@@ -99,10 +110,17 @@ void EditTextWidget::drawWidget() {
 	const Common::Rect &r = Common::Rect(_x + 2 + _leftPadding, _y + 2, _x + _leftPadding + getEditRect().width() + 8, _y + _h);
 	setTextDrawableArea(r);
 
-	Graphics::TextAlign alignment = g_gui.useRTL() ? Graphics::kTextAlignRight : Graphics::kTextAlignLeft;
+	Graphics::TextAlign alignment = Graphics::kTextAlignLeft;
+	if (g_gui.useRTL() && _editScrollOffset == 0)
+		alignment = Graphics::kTextAlignRight;
+
+	Common::Rect r1(_x + 2 + _leftPadding, _y + 1, _x + _leftPadding + getEditRect().width() + 2, _y + _h);
+	if (g_gui.useRTL()) {
+		r1.translate(-3, 0);
+	}
 
 	g_gui.theme()->drawText(
-			Common::Rect(_x + 2 + _leftPadding, _y + 1, _x + _leftPadding + getEditRect().width() + 2, _y + _h),
+			r1,
 			_editString, _state, alignment, ThemeEngine::kTextInversionNone,
 			-_editScrollOffset, false, _font, ThemeEngine::kFontColorNormal, true, _textDrawableArea);
 }

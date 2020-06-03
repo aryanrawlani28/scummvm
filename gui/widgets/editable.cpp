@@ -264,7 +264,7 @@ void EditableWidget::defaultKeyDownHandler(Common::KeyState &state, bool &dirty,
 	}
 }
 
-int EditableWidget::getCaretOffset() const {
+int EditableWidget::getCaretOffset(bool *aligned) const {
 	int caretpos = 0;
 
 	uint last = 0;
@@ -275,6 +275,17 @@ int EditableWidget::getCaretOffset() const {
 	}
 
 	caretpos -= _editScrollOffset;
+	*aligned = false;
+
+	if (g_gui.useRTL()) {
+		uint swidth = g_gui.getStringWidth(_editString);
+
+		if (swidth < getEditRect().width()) {
+			caretpos = swidth - caretpos;
+			*aligned = true;
+		}
+
+	}
 
 	return caretpos;
 }
@@ -290,8 +301,9 @@ void EditableWidget::drawCaret(bool erase) {
 	int y = editRect.top;
 
 	Graphics::TextAlign alignment = Graphics::kTextAlignLeft;
+	bool aligned = false;
 
-	const int caretOffset = getCaretOffset();
+	const int caretOffset = getCaretOffset(&aligned);
 	x += caretOffset;
 
 	if (y < 0 || y + editRect.height() > _h)
@@ -301,7 +313,12 @@ void EditableWidget::drawCaret(bool erase) {
 	y += getAbsY();
 
 	if (g_gui.useRTL()) {
-		x += (g_system->getOverlayWidth() - _x - _x - _w);
+		x = g_system->getOverlayWidth() - editRect.left - getAbsX() + g_gui.getOverlayOffset() - 7;
+		if (aligned)
+			x -= caretOffset;
+		else
+			x += caretOffset + editRect.left - editRect.right;
+
 		alignment = Graphics::kTextAlignRight;
 	}
 
@@ -353,12 +370,21 @@ bool EditableWidget::adjustOffset() {
 	// check if the caret is still within the textbox; if it isn't,
 	// adjust _editScrollOffset
 
-	int caretpos = getCaretOffset();
+	bool aligned = false;
+	int caretpos = getCaretOffset(&aligned);
 	const int editWidth = getEditRect().width();
+
+	if (aligned)
+		return false;
 
 	if (caretpos < 0) {
 		// scroll left
 		_editScrollOffset += caretpos;
+
+		// Edge case, when at the leftmost, scroll a bit more to make the last letter visible nicely
+		if (g_gui.useRTL() && _editScrollOffset == 0) {
+			_editScrollOffset = -5;
+		}
 		return true;
 	} else if (caretpos >= editWidth) {
 		// scroll right

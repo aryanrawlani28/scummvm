@@ -85,7 +85,7 @@ protected:
 	 * graphics glitches when redrawing the caret can occur.
 	 */
 	virtual Common::Rect getEditRect() const = 0;
-	virtual int getCaretOffset() const;
+	virtual int getCaretOffset(bool *aligned) const;
 	void drawCaret(bool erase);
 	bool adjustOffset();
 	void makeCaretVisible();
