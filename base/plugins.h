@@ -137,6 +137,33 @@ extern int pluginTypeVersions[PLUGIN_TYPE_MAX];
 #endif // DYNAMIC_MODULES
 
 
+#ifdef DYNAMIC_MODULES
+
+/**
+ * REGISTER_PLUGIN_ENGINE_DYNAMIC is a convenience macro that declares
+ * some checks and other metadata for MetaEngines.
+ * MetaEngines which need to implement a dynamic plugin to export some metadata,
+ * can simply invoke this macro with a plugin ID, plugin type, and the correct
+ * wrapper code will be inserted.
+ *
+ * @see REGISTER_PLUGIN_STATIC
+ * @see REGISTER_PLUGIN_DYNAMIC
+ *
+ * @note MetaEngines are always built into the executable, so they're not instantiated here.
+ */
+#define REGISTER_PLUGIN_ENGINE_DYNAMIC(ID,TYPE) \
+	extern "C" { \
+		PLUGIN_DYNAMIC_DSO_HANDLE \
+		PLUGIN_DYNAMIC_BUILD_DATE \
+		PLUGIN_EXPORT int32 PLUGIN_getVersion() { return PLUGIN_VERSION; } \
+		PLUGIN_EXPORT int32 PLUGIN_getType() { return TYPE; } \
+		PLUGIN_EXPORT int32 PLUGIN_getTypeVersion() { return TYPE##_VERSION; } \
+	} \
+	void dummyFuncToAllowTrailingSemicolon()
+
+#endif // DYNAMIC_MODULES
+
+
 // Abstract plugins
 
 /**
