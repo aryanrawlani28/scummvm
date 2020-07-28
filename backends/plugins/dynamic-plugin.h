@@ -124,6 +124,20 @@ public:
 	}
 
 	virtual bool createInstanceOfAdvancedMetaEngine(OSystem *syst, Engine **engine, const ADGameDescription *desc) override {
+		typedef bool (*BoolFunc)(OSystem *syst, Engine **engine, const ADGameDescription *desc);
+
+		BoolFunc createInstanceFunc = (BoolFunc)findSymbol("createInstance");
+
+		if (createInstanceFunc) {
+			warning("DynamicPlugins: Creating Instance of required game.");
+			createInstanceFunc(syst, engine, desc);
+			warning("DynamicPlugins: Engine instance created...");
+
+			return true;
+		} else {
+			warning("DynamicPlugins: Couldn't find a plugin for this. Games will not run until you have the necessary plugins.");
+		}
+
 		return false;
 	}
 };
