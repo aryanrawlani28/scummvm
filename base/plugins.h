@@ -154,6 +154,12 @@ public:
 	virtual const char *getName() const = 0;
 };
 
+// Forward declarations, necessary for importing the createInstance
+// methods from the engine code.
+class OSystem;
+class Engine;
+struct ADGameDescription;
+
 /**
  * Abstract base class for the plugin system.
  * Subclasses for this can be used to wrap both static and dynamic
@@ -175,6 +181,17 @@ public:
 //	virtual bool isLoaded() const = 0; // TODO
 	virtual bool loadPlugin() = 0;     // TODO: Rename to load() ?
 	virtual void unloadPlugin() = 0;   // TODO: Rename to unload() ?
+
+	/**
+	 * PVF for creating instances of Engines from MetaEngine.
+	 * These will only be implemented by DynamicPlugins.
+	 * They are used when a Engine lives in an external library,
+	 * along with our createInstance method, which actually instantiates
+	 * the engine. Note that in the external libraries, the createInstance
+	 * functions are NOT class methods, but standalone functions.
+	 */
+	virtual bool createInstanceOfMetaEngine(OSystem *syst, Engine **engine) = 0;
+	virtual bool createInstanceOfAdvancedMetaEngine(OSystem *syst, Engine **engine, const ADGameDescription *desc) = 0;
 
 	/**
 	 * The following functions query information from the plugin object once

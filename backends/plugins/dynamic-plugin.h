@@ -104,6 +104,14 @@ public:
 	virtual const char *getFileName() const {
 		return _filename.c_str();
 	}
+
+	virtual bool createInstanceOfMetaEngine(OSystem *syst, Engine **engine) override {
+		return false;
+	}
+
+	virtual bool createInstanceOfAdvancedMetaEngine(OSystem *syst, Engine **engine, const ADGameDescription *desc) override {
+		return false;
+	}
 };
 
 #endif

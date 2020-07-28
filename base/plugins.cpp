@@ -65,6 +65,14 @@ public:
 
 	virtual bool loadPlugin()		{ return true; }
 	virtual void unloadPlugin()		{}
+
+	virtual bool createInstanceOfMetaEngine(OSystem *syst, Engine **engine) override {
+		return false;
+	}
+
+	virtual bool createInstanceOfAdvancedMetaEngine(OSystem *syst, Engine **engine, const ADGameDescription *desc) override {
+		return false;
+	}
 };
 
 class StaticPluginProvider : public PluginProvider {
