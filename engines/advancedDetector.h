@@ -263,8 +263,8 @@ public:
 	virtual const ExtraGuiOptions getExtraGuiOptions(const Common::String &target) const override;
 
 protected:
-	// To be implemented by subclasses
-	virtual bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const = 0;
+	// To be implemented by subclasses, ONLY if they are static.
+	virtual bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const;
 
 	typedef Common::HashMap<Common::String, Common::FSNode, Common::IgnoreCase_Hash, Common::IgnoreCase_EqualTo> FileMap;
 
