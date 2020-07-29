@@ -79,19 +79,25 @@ public:
 			return false;
 		}
 
-		// Get the plugin's instantiator object
-		GetObjectFunc getObject = (GetObjectFunc)findSymbol("PLUGIN_getObject");
-		if (!getObject) {
-			unloadPlugin();
-			return false;
-		}
+		// Get the plugin's instantiator object, if it isn't an Engine.
+		// MetaEngines are always available statically, and Engines are
+		// instantiated with other helper methods from this class.
+		if (_type != PLUGIN_TYPE_ENGINE) {
 
-		// Get the plugin object
-		_pluginObject = getObject();
-		if (!_pluginObject) {
-			warning("Couldn't get the plugin object");
-			unloadPlugin();
-			return false;
+			// Get the plugin's instantiator object
+			GetObjectFunc getObject = (GetObjectFunc)findSymbol("PLUGIN_getObject");
+			if (!getObject) {
+				unloadPlugin();
+				return false;
+			}
+
+			// Get the plugin object
+			_pluginObject = getObject();
+			if (!_pluginObject) {
+				warning("Couldn't get the plugin object");
+				unloadPlugin();
+				return false;
+			}
 		}
 
 		return true;
