@@ -536,18 +536,14 @@ extern "C" int scummvm_main(int argc, const char * const argv[]) {
 			// to save memory
 
 			/**
-			 * This is disabled for now, because above, we get a MetaEngine type plugin.
-			 * MetaEngines are always loaded into memory, so we don't need to unload them.
-			 * We do need to unload external libraries, but the function below is different types.
-			 * PLUGINS TODO: Implement a type check function, and unload all plugins except.
 			 * Food for thought: Because we detect games all statically, it may be better to just
 			 * keep one plugin loaded into memory at all times, and then instantiate that when
 			 * user would start the game. Something like UncachedPluginManager, but we use it ALWAYS.
 			 * and disabling loading all plugins for a dynamic plugin provider. Something like this?
 			 * Also, it wouldn't really make sense that we loadAllPlugins of external runtime libraries (of engine types),
-			 * do nothing with them, and unload them here.
+			 * do nothing with them(?), and unload them here.
 			 */
-			//PluginManager::instance().unloadPluginsExcept(PLUGIN_TYPE_ENGINE, plugin);
+			PluginManager::instance().unloadPluginsExcept(PLUGIN_TYPE_ENGINE, plugin);
 
 #ifdef ENABLE_EVENTRECORDER
 			Common::String recordMode = ConfMan.get("record_mode");
