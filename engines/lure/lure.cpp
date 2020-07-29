@@ -282,23 +282,4 @@ Common::String *LureEngine::detectSave(int slotNumber) {
 	return result;
 }
 
-Common::String getSaveName(Common::InSaveFile *in) {
-	// Check for header
-	char saveName[MAX_DESC_SIZE];
-	char buffer[5];
-	in->read(&buffer[0], 5);
-	if (memcmp(&buffer[0], "lure", 5) == 0) {
-		// Check language version
-		in->readByte();
-		in->readByte();
-		char *p = saveName;
-		int decCtr = MAX_DESC_SIZE - 1;
-		while ((decCtr > 0) && ((*p++ = in->readByte()) != 0)) --decCtr;
-		*p = '\0';
-
-	}
-
-	return Common::String(saveName);
-}
-
 } // End of namespace Lure

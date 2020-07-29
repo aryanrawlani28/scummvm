@@ -63,6 +63,25 @@ void LureMetaEngine::removeSaveState(const char *target, int slot) const {
 	g_system->getSavefileManager()->removeSavefile(filename);
 }
 
+Common::String getSaveName(Common::InSaveFile *in) {
+	// Check for header
+	char saveName[MAX_DESC_SIZE];
+	char buffer[5];
+	in->read(&buffer[0], 5);
+	if (memcmp(&buffer[0], "lure", 5) == 0) {
+		// Check language version
+		in->readByte();
+		in->readByte();
+		char *p = saveName;
+		int decCtr = MAX_DESC_SIZE - 1;
+		while ((decCtr > 0) && ((*p++ = in->readByte()) != 0)) --decCtr;
+		*p = '\0';
+
+	}
+
+	return Common::String(saveName);
+}
+
 SaveStateList LureMetaEngine::listSaves(const char *target) const {
 	Common::SaveFileManager *saveFileMan = g_system->getSavefileManager();
 	Common::StringArray filenames;
@@ -79,7 +98,7 @@ SaveStateList LureMetaEngine::listSaves(const char *target) const {
 		if (slotNum >= 0 && slotNum <= 999) {
 			Common::InSaveFile *in = saveFileMan->openForLoading(*file);
 			if (in) {
-				saveDesc = Lure::getSaveName(in);
+				saveDesc = getSaveName(in);
 				saveList.push_back(SaveStateDescriptor(slotNum, saveDesc));
 				delete in;
 			}

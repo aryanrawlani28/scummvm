@@ -132,7 +132,7 @@ public:
 		return _saveLoadAllowed && !Fights.isFighting();
 	}
 };
-	Common::String getSaveName(Common::InSaveFile *in);
+
 } // End of namespace Lure
 
 #endif
