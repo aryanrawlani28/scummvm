@@ -511,21 +511,39 @@ void PluginManager::addToPluginsInMemList(Plugin *plugin) {
 	// The plugin is valid, see if it provides the same module as an
 	// already loaded one and should replace it.
 
-	PluginList::iterator pl = _pluginsInMem[plugin->getType()].begin();
-	while (!found && pl != _pluginsInMem[plugin->getType()].end()) {
-		if (!strcmp(plugin->getName(), (*pl)->getName())) {
+	const PluginType pt = plugin->getType();
+	bool update = false;
+
+	PluginList::iterator pl = _pluginsInMem[pt].begin();
+	while (!found && pl != _pluginsInMem[pt].end()) {
+		if (pt == PLUGIN_TYPE_ENGINE) {
+			if (!strcmp(plugin->getFileName(), (*pl)->getFileName())) {
+				update = true;
+			}
+		} else {
+			if (!strcmp(plugin->getName(), (*pl)->getName())) {
+				update = true;
+			}
+		}
+
+		if (update) {
 			// Found a duplicated module. Replace the old one.
 			found = true;
 			delete *pl;
 			*pl = plugin;
-			debug(1, "Replaced the duplicated plugin: '%s'", plugin->getName());
+			if (pt == PLUGIN_TYPE_ENGINE) {
+				debug(1, "Replaced the duplicated plugin: '%s'", plugin->getFileName());
+			} else {
+				debug(1, "Replaced the duplicated plugin: '%s'", plugin->getName());
+			}
+			update = false;
 		}
 		pl++;
 	}
 
 	if (!found) {
 		// If it provides a new module, just add it to the list of known plugins in memory.
-		_pluginsInMem[plugin->getType()].push_back(plugin);
+		_pluginsInMem[pt].push_back(plugin);
 	}
 }
 
