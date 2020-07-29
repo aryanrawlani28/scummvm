@@ -136,10 +136,14 @@ public:
 
 		if (createInstanceFunc) {
 			warning("DynamicPlugins: Creating Instance of required game.");
-			createInstanceFunc(syst, engine, desc);
-			warning("DynamicPlugins: Engine instance created...");
+			if (createInstanceFunc(syst, engine, desc)) {
+				warning("DynamicPlugins: Engine instance created...");
+				return true;
+			} else {
+				warning("DynamicPlugins: Engine instance not created, because createInstance returned false...");
+			}
 
-			return true;
+			return false;
 		} else {
 			warning("DynamicPlugins: Couldn't find a plugin for this. Games will not run until you have the necessary plugins.");
 		}
