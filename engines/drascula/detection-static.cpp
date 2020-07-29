@@ -134,3 +134,4 @@ void DrasculaMetaEngine::removeSaveState(const char *target, int slot) const {
 
 } // End of namespace Drascula
 
+REGISTER_PLUGIN_STATIC(DRASCULA, PLUGIN_TYPE_METAENGINE, Drascula::DrasculaMetaEngine);

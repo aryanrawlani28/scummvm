@@ -51,7 +51,11 @@ void DrasculaEngine::loadArchives() {
 
 namespace Drascula {
 
+#if PLUGIN_ENABLED_DYNAMIC(DRASCULA)
+extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
+#else
 bool DrasculaMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
+#endif
 	const Drascula::DrasculaGameDescription *gd = (const Drascula::DrasculaGameDescription *)desc;
 	if (gd) {
 		*engine = new Drascula::DrasculaEngine(syst, gd);
@@ -62,7 +66,5 @@ bool DrasculaMetaEngine::createInstance(OSystem *syst, Engine **engine, const AD
 } // End of namespace Drascula
 
 #if PLUGIN_ENABLED_DYNAMIC(DRASCULA)
-	REGISTER_PLUGIN_DYNAMIC(DRASCULA, PLUGIN_TYPE_ENGINE, Drascula::DrasculaMetaEngine);
-#else
-	REGISTER_PLUGIN_STATIC(DRASCULA, PLUGIN_TYPE_ENGINE, Drascula::DrasculaMetaEngine);
+	REGISTER_PLUGIN_ENGINE_DYNAMIC(DRASCULA, PLUGIN_TYPE_ENGINE);
 #endif

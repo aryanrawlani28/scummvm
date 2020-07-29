@@ -332,7 +332,9 @@ public:
 
 	const char *getOriginalCopyright() const override;
 
+#if PLUGIN_ENABLED_STATIC(DRASCULA)
 	bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *gd) const override;
+#endif
 	bool hasFeature(MetaEngineFeature f) const override;
 	const ExtraGuiOptions getExtraGuiOptions(const Common::String &target) const override;
 	SaveStateList listSaves(const char *target) const override;
