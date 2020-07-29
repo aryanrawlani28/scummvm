@@ -35,8 +35,7 @@
 #include "graphics/thumbnail.h"
 #include "graphics/surface.h"
 
-// Agi Resources
-#include "agi/agi.h"
+// Agi Resources, for detection.
 #include "agi/wagparser.h"
 
 namespace Agi {

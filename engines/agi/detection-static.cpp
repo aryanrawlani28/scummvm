@@ -21,6 +21,9 @@
  */
 
 #include "agi/detection-static.h"
+#include "agi/common-engine-metaengine.h"
+#include "common/system.h"
+#include "common/debug.h"
 
 static const PlainGameDescriptor agiGames[] = {
 	{"agi", "Sierra AGI game"},
