@@ -46,6 +46,10 @@ static const PlainGameDescriptor drasculaGames[] = {
 
 namespace Drascula {
 
+enum DrasculaGameFeatures {
+	GF_PACKED = (1 << 0)
+};
+
 static const DrasculaGameDescription gameDescriptions[] = {
 
 //// Packed versions //////////////////////////////////////////////////////

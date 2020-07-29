@@ -57,10 +57,6 @@ namespace Drascula {
 #define DRASCULA_DAT_VER 6
 #define DATAALIGNMENT 4
 
-enum DrasculaGameFeatures {
-	GF_PACKED = (1 << 0)
-};
-
 enum Languages {
 	kEnglish = 0,
 	kSpanish = 1,
