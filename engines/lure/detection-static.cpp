@@ -109,3 +109,5 @@ SaveStateList LureMetaEngine::listSaves(const char *target) const {
 	Common::sort(saveList.begin(), saveList.end(), SaveStateDescriptorSlotComparator());
 	return saveList;
 }
+
+REGISTER_PLUGIN_STATIC(LURE, PLUGIN_TYPE_METAENGINE, LureMetaEngine);

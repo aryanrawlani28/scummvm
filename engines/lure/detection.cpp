@@ -51,7 +51,11 @@ bool Lure::LureEngine::hasFeature(EngineFeature f) const {
 		(f == kSupportsSavingDuringRuntime);
 }
 
+#if PLUGIN_ENABLED_DYNAMIC(LURE)
+extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
+#else
 bool LureMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
+#endif
 	const Lure::LureGameDescription *gd = (const Lure::LureGameDescription *)desc;
 	if (gd) {
 		*engine = new Lure::LureEngine(syst, gd);
@@ -60,7 +64,5 @@ bool LureMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGame
 }
 
 #if PLUGIN_ENABLED_DYNAMIC(LURE)
-	REGISTER_PLUGIN_DYNAMIC(LURE, PLUGIN_TYPE_ENGINE, LureMetaEngine);
-#else
-	REGISTER_PLUGIN_STATIC(LURE, PLUGIN_TYPE_ENGINE, LureMetaEngine);
+	REGISTER_PLUGIN_ENGINE_DYNAMIC(LURE, PLUGIN_TYPE_ENGINE);
 #endif

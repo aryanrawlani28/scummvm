@@ -223,7 +223,9 @@ public:
 	const char *getOriginalCopyright() const override;
 
 	bool hasFeature(MetaEngineFeature f) const override;
+#if PLUGIN_ENABLED_STATIC(LURE)
 	bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const override;
+#endif
 	SaveStateList listSaves(const char *target) const override;
 	int getMaximumSaveSlot() const override;
 	void removeSaveState(const char *target, int slot) const override;
