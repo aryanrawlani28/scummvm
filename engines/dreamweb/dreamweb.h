@@ -34,11 +34,10 @@
 
 #include "dreamweb/console.h"
 
+// Includes common requiring files between engines and metaengines.
+// It includes structs, defines, etc.
+#include "dreamweb/common-engine-metaengine.h"
 #include "dreamweb/structs.h"
-
-#define SCUMMVM_HEADER MKTAG('S', 'C', 'V', 'M')
-#define SCUMMVM_BLOCK_MAGIC_SIZE 0x1234
-#define SAVEGAME_VERSION 1
 
 namespace Common {
 class File;

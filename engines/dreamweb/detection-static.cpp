@@ -86,6 +86,8 @@ void DreamWebMetaEngine::removeSaveState(const char *target, int slot) const {
 	g_system->getSavefileManager()->removeSavefile(fileName);
 }
 
+#include "dreamweb/common-engine-metaengine.h" // Includes FileHeader struct, and some defines.
+
 SaveStateDescriptor DreamWebMetaEngine::querySaveMetaInfos(const char *target, int slot) const {
 	Common::String filename = Common::String::format("DREAMWEB.D%02d", slot);
 	Common::InSaveFile *in = g_system->getSavefileManager()->openForLoading(filename.c_str());

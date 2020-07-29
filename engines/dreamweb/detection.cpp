@@ -22,8 +22,6 @@
 
 
 #include "dreamweb/dreamweb.h"
-#include "dreamweb/structs.h"
-
 #include "detection-static.h"
 
 bool DreamWeb::DreamWebEngine::hasFeature(EngineFeature f) const {

@@ -31,8 +31,6 @@
 
 #include "engines/advancedDetector.h"
 
-#include "dreamweb/dreamweb.h"
-
 static const PlainGameDescriptor dreamWebGames[] = {
 	{ "dreamweb", "DreamWeb" },
 	{ 0, 0 }
