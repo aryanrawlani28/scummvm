@@ -40,8 +40,6 @@ const char *DrasculaMetaEngine::getOriginalCopyright() const {
     return "Drascula: The Vampire Strikes Back (C) 2000 Alcachofa Soft, (C) 1996 Digital Dreams Multimedia, (C) 1994 Emilio de Paz";
 }
 
-SaveStateDescriptor loadMetaData(Common::ReadStream *s, int slot, bool setPlayTime);
-
 bool DrasculaMetaEngine::hasFeature(MetaEngineFeature f) const {
 	return
 		(f == kSupportsListSaves) ||
@@ -60,6 +58,8 @@ const ExtraGuiOptions DrasculaMetaEngine::getExtraGuiOptions(const Common::Strin
 	return options;
 }
 
+#include "drascula/saveload.h" // For using "loadMetaData" in the below function(s).
+
 SaveStateList DrasculaMetaEngine::listSaves(const char *target) const {
 	Common::SaveFileManager *saveFileMan = g_system->getSavefileManager();
 	Common::StringArray filenames;
@@ -77,7 +77,7 @@ SaveStateList DrasculaMetaEngine::listSaves(const char *target) const {
 		if (slotNum >= 0 && slotNum <= getMaximumSaveSlot()) {
 			Common::InSaveFile *in = saveFileMan->openForLoading(*file);
 			if (in) {
-				SaveStateDescriptor desc = loadMetaData(in, slotNum, false);
+				SaveStateDescriptor desc = Drascula::loadMetaData(in, slotNum, false);
 				if (desc.getSaveSlot() != slotNum) {
 					// invalid
 					delete in;
