@@ -39,7 +39,6 @@ MODULE_OBJS := \
 	systemui.o \
 	text.o \
 	view.o \
-	wagparser.o \
 	words.o
 
 
@@ -50,3 +49,7 @@ endif
 
 # Include common rules
 include $(srcdir)/rules.mk
+
+# Detection files
+DETECT_OBJS += $(MODULE)/detection-static.o
+DETECT_OBJS += $(MODULE)/wagparser.o

@@ -93,7 +93,11 @@ bool Agi::AgiBase::hasFeature(EngineFeature f) const {
 }
 
 
+#if PLUGIN_ENABLED_DYNAMIC(AGI)
+extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
+#else
 bool Agi::AgiMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
+#endif
 	const Agi::AGIGameDescription *gd = (const Agi::AGIGameDescription *)desc;
 	bool res = true;
 
@@ -129,9 +133,7 @@ bool Agi::AgiMetaEngine::createInstance(OSystem *syst, Engine **engine, const AD
 }
 
 #if PLUGIN_ENABLED_DYNAMIC(AGI)
-	REGISTER_PLUGIN_DYNAMIC(AGI, PLUGIN_TYPE_ENGINE, AgiMetaEngine);
-#else
-	REGISTER_PLUGIN_STATIC(AGI, PLUGIN_TYPE_ENGINE, AgiMetaEngine);
+	REGISTER_PLUGIN_ENGINE_DYNAMIC(AGI, PLUGIN_TYPE_ENGINE);
 #endif
 
 namespace Agi {

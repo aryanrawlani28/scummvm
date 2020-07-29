@@ -441,3 +441,11 @@ SaveStateList AgiMetaEngine::listSaves(const char *target) const {
 	return saveList;
 }
 
+/**
+ * MetaEngines always go into the executable.
+ * If you want to support Dynamic modules for this engine,
+ * you should register the plugin as Dynamic in
+ * detection.cpp, and use the REGISTER_PLUGIN_ENGINE_DYNAMIC macro.
+ */
+REGISTER_PLUGIN_STATIC(AGI, PLUGIN_TYPE_METAENGINE, AgiMetaEngine);
+
