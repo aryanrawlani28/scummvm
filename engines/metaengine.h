@@ -409,8 +409,14 @@ public:
 	/** Find a plugin by its engine ID */
 	const Plugin *findPlugin(const Common::String &engineId) const;
 
-	/** Get the list of all engine plugins */
-	const PluginList &getPlugins() const;
+	/**
+	 * Get the list of all plugins for the type specified.
+	 * By default, it will get Engines, for now.
+	 * In the future, this should ideally get MetaEngines by default,
+	 * but to avoid breaking everything, for now, setting this as ENGINE is
+	 * a good choice.
+	 */
+	const PluginList &getPlugins(const PluginType fetchPluginType = PLUGIN_TYPE_ENGINE) const;
 
 	/** Find a target */
 	QualifiedGameDescriptor findTarget(const Common::String &target, const Plugin **plugin = NULL) const;
