@@ -23,17 +23,14 @@
 #include "common/textconsole.h"
 #include "common/translation.h"
 
-#include "engines/savestate.h"
 #include "graphics/thumbnail.h"
 #include "gui/message.h"
-#include "gui/saveload.h"
 
 #include "drascula/drascula.h"
+#include "drascula/saveload.h" // For some constants, and the definition of loadMetaData.
+
 
 namespace Drascula {
-
-#define MAGIC_HEADER 0xD6A55A57		// (D)rascula (GA)me (S)cummVM (SA)ve (ST)ate
-#define SAVEGAME_VERSION 1
 
 void DrasculaEngine::checkForOldSaveGames() {
 	Common::String indexFileName = Common::String::format("%s.epa", _targetName.c_str());
@@ -99,43 +96,6 @@ void DrasculaEngine::checkForOldSaveGames() {
 
 	// Remove index file
 	_saveFileMan->removeSavefile(indexFileName);
-}
-
-SaveStateDescriptor loadMetaData(Common::ReadStream *s, int slot, bool setPlayTime) {
-	uint32 sig = s->readUint32BE();
-	byte version = s->readByte();
-
-	SaveStateDescriptor desc(-1, "");	// init to an invalid save slot
-
-	if (sig != MAGIC_HEADER || version > SAVEGAME_VERSION)
-		return desc;
-
-	// Save is valid, set its slot number
-	desc.setSaveSlot(slot);
-
-	Common::String name;
-	byte size = s->readByte();
-	for (int i = 0; i < size; ++i)
-		name += s->readByte();
-	desc.setDescription(name);
-
-	uint32 saveDate = s->readUint32LE();
-	int day = (saveDate >> 24) & 0xFF;
-	int month = (saveDate >> 16) & 0xFF;
-	int year = saveDate & 0xFFFF;
-	desc.setSaveDate(year, month, day);
-
-	uint16 saveTime = s->readUint16LE();
-	int hour = (saveTime >> 8) & 0xFF;
-	int minutes = saveTime & 0xFF;
-	desc.setSaveTime(hour, minutes);
-
-	uint32 playTime = s->readUint32LE();
-	desc.setPlayTime(playTime * 1000);
-	if (setPlayTime)
-		g_engine->setTotalPlayTime(playTime * 1000);
-
-	return desc;
 }
 
 void saveMetaData(Common::WriteStream *s, const Common::String &desc) {
