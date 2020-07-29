@@ -152,3 +152,4 @@ SaveStateDescriptor DreamWebMetaEngine::querySaveMetaInfos(const char *target, i
 	return SaveStateDescriptor();
 }
 
+REGISTER_PLUGIN_STATIC(DREAMWEB, PLUGIN_TYPE_METAENGINE, DreamWebMetaEngine);

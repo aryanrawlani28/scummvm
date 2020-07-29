@@ -38,7 +38,11 @@ bool DreamWeb::DreamWebEngine::hasFeature(EngineFeature f) const {
 	return false;
 }
 
+#if PLUGIN_ENABLED_DYNAMIC(DREAMWEB)
+extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
+#else
 bool DreamWebMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
+#endif
 	const DreamWeb::DreamWebGameDescription *gd = (const DreamWeb::DreamWebGameDescription *)desc;
 	if (gd) {
 		*engine = new DreamWeb::DreamWebEngine(syst, gd);
@@ -47,9 +51,7 @@ bool DreamWebMetaEngine::createInstance(OSystem *syst, Engine **engine, const AD
 }
 
 #if PLUGIN_ENABLED_DYNAMIC(DREAMWEB)
-	REGISTER_PLUGIN_DYNAMIC(DREAMWEB, PLUGIN_TYPE_ENGINE, DreamWebMetaEngine);
-#else
-	REGISTER_PLUGIN_STATIC(DREAMWEB, PLUGIN_TYPE_ENGINE, DreamWebMetaEngine);
+	REGISTER_PLUGIN_ENGINE_DYNAMIC(DREAMWEB, PLUGIN_TYPE_ENGINE);
 #endif
 
 namespace DreamWeb {

@@ -74,7 +74,9 @@ public:
 
 	const char *getOriginalCopyright() const override;
 
+#if PLUGIN_ENABLED_STATIC(DREAMWEB)
 	bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const override;
+#endif
 	bool hasFeature(MetaEngineFeature f) const override;
 	SaveStateList listSaves(const char *target) const override;
 	int getMaximumSaveSlot() const override;
