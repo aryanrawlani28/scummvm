@@ -35,6 +35,11 @@
 #include "engines/advancedDetector.h"
 #include "engines/obsolete.h"
 
+#ifdef DYNAMIC_MODULES
+#include "base/plugins.h"
+#include "backends/plugins/dynamic-plugin.h"
+#endif
+
 static Common::String sanitizeName(const char *name) {
 	Common::String res;
 
@@ -313,6 +318,33 @@ Common::Error AdvancedMetaEngine::createInstance(OSystem *syst, Engine **engine)
 		return Common::kNoGameDataFoundError;
 	else
 		return Common::kNoError;
+}
+
+bool AdvancedMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
+#ifdef DYNAMIC_MODULES
+	PluginList pl = PluginMan.getPlugins(PLUGIN_TYPE_ENGINE);
+	Plugin *plugin = nullptr;
+
+	// Temporary, until we figure out a way to have the intended plugin
+	// loaded only, when we get here.
+	if (pl.size() == 1) {
+		plugin = pl[0];
+	}
+
+	if (plugin && plugin->getFileName()) {
+		if (plugin->createInstanceOfAdvancedMetaEngine(syst, engine, desc)) {
+			warning("AME: Plugin loaded, and engine instantiated successfully.");
+			return true;
+		} else {
+			warning("AME: Plugin loaded, but couldn't instantiate the engine.");
+			return false;
+		}
+	} else {
+		warning("AME: No plugin found.");
+		return false;
+	}
+#endif
+		return false;
 }
 
 void AdvancedMetaEngine::composeFileHashMap(FileMap &allFiles, const Common::FSList &fslist, int depth, const Common::String &parentName) const {
