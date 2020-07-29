@@ -12,3 +12,6 @@ endif
 
 # Include common rules
 include $(srcdir)/rules.mk
+
+# Detection files
+DETECT_OBJS += $(MODULE)/detection-static.o

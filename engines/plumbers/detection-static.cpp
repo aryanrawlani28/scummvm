@@ -78,3 +78,5 @@ const char *PlumbersMetaEngine::getOriginalCopyright() const {
 bool PlumbersMetaEngine::hasFeature(MetaEngineFeature f) const {
 	return false;
 }
+
+REGISTER_PLUGIN_STATIC(PLUMBERS, PLUGIN_TYPE_METAENGINE, PlumbersMetaEngine);

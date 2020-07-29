@@ -29,8 +29,11 @@ const char *PlumbersGame::getGameId() const { return _gameDescription->gameId; }
 Common::Platform PlumbersGame::getPlatform() const { return _gameDescription->platform; }
 }
 
-
+#if PLUGIN_ENABLED_DYNAMIC(PLUMBERS)
+extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
+#else
 bool PlumbersMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
+#endif
 	if (desc)
 		*engine = new Plumbers::PlumbersGame(syst, desc);
 
@@ -38,7 +41,5 @@ bool PlumbersMetaEngine::createInstance(OSystem *syst, Engine **engine, const AD
 }
 
 #if PLUGIN_ENABLED_DYNAMIC(PLUMBERS)
-REGISTER_PLUGIN_DYNAMIC(PLUMBERS, PLUGIN_TYPE_ENGINE, PlumbersMetaEngine);
-#else
-REGISTER_PLUGIN_STATIC(PLUMBERS, PLUGIN_TYPE_ENGINE, PlumbersMetaEngine);
+REGISTER_PLUGIN_ENGINE_DYNAMIC(PLUMBERS, PLUGIN_TYPE_ENGINE);
 #endif

@@ -6247,7 +6247,7 @@ EOF
 	fi
 done
 
-declare -a static_detect_engines=("AGI")
+declare -a static_detect_engines=("AGI" "PLUMBERS")
 
 echo "Creating engines/plugins_table.h"
 cat > engines/plugins_table.h << EOF

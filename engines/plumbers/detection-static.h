@@ -35,6 +35,8 @@ public:
 
 	bool hasFeature(MetaEngineFeature f) const override;
 
+#if PLUGIN_ENABLED_STATIC(PLUMBERS)
 	bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const override;
+#endif
 
 };
