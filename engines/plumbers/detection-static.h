@@ -20,25 +20,21 @@
  *
  */
 
-#include "plumbers/plumbers.h"
+#include "base/plugins.h"
+#include "engines/advancedDetector.h"
 
-#include "plumbers/detection-static.h"
+class PlumbersMetaEngine : public AdvancedMetaEngine {
+public:
+	PlumbersMetaEngine();
 
-namespace Plumbers {
-const char *PlumbersGame::getGameId() const { return _gameDescription->gameId; }
-Common::Platform PlumbersGame::getPlatform() const { return _gameDescription->platform; }
-}
+	const char *getEngineId() const override;
 
+	const char *getName() const override;
 
-bool PlumbersMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
-	if (desc)
-		*engine = new Plumbers::PlumbersGame(syst, desc);
+	const char *getOriginalCopyright() const override;
 
-	return desc != nullptr;
-}
+	bool hasFeature(MetaEngineFeature f) const override;
 
-#if PLUGIN_ENABLED_DYNAMIC(PLUMBERS)
-REGISTER_PLUGIN_DYNAMIC(PLUMBERS, PLUGIN_TYPE_ENGINE, PlumbersMetaEngine);
-#else
-REGISTER_PLUGIN_STATIC(PLUMBERS, PLUGIN_TYPE_ENGINE, PlumbersMetaEngine);
-#endif
+	bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const override;
+
+};
