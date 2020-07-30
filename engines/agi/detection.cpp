@@ -96,7 +96,7 @@ bool Agi::AgiBase::hasFeature(EngineFeature f) const {
 #if PLUGIN_ENABLED_DYNAMIC(AGI)
 extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
 #else
-bool Agi::AgiMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
+bool AgiMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
 #endif
 	const Agi::AGIGameDescription *gd = (const Agi::AGIGameDescription *)desc;
 	bool res = true;
