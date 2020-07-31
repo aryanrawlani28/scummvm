@@ -3,7 +3,7 @@ MODULE := engines/dreamweb
 MODULE_OBJS := \
 	backdrop.o \
 	console.o \
-	detection.o \
+	metaengine.o \
 	dreamweb.o \
 	keypad.o \
 	monitor.o \
@@ -33,4 +33,4 @@ endif
 include $(srcdir)/rules.mk
 
 # Detection objects
-DETECT_OBJS += $(MODULE)/detection-static.o
+DETECT_OBJS += $(MODULE)/detection.o
