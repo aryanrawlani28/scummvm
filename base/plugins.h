@@ -24,6 +24,7 @@
 #define BASE_PLUGINS_H
 
 #include "common/array.h"
+#include "common/error.h"
 #include "common/fs.h"
 #include "common/str.h"
 #include "backends/plugins/elf/version.h"
@@ -229,7 +230,7 @@ public:
 	 * the engine. Note that in the external libraries, the createInstance
 	 * functions are NOT class methods, but standalone functions.
 	 */
-	virtual bool createInstanceOfMetaEngine(OSystem *syst, Engine **engine) = 0;
+	virtual Common::Error createInstanceOfMetaEngine(OSystem *syst, Engine **engine) = 0;
 	virtual bool createInstanceOfAdvancedMetaEngine(OSystem *syst, Engine **engine, const ADGameDescription *desc) = 0;
 
 	/**

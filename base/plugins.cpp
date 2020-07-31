@@ -74,8 +74,8 @@ public:
 	virtual bool loadPlugin()		{ return true; }
 	virtual void unloadPlugin()		{}
 
-	virtual bool createInstanceOfMetaEngine(OSystem *syst, Engine **engine) override {
-		return false;
+	virtual Common::Error createInstanceOfMetaEngine(OSystem *syst, Engine **engine) override {
+		return Common::Error();
 	}
 
 	virtual bool createInstanceOfAdvancedMetaEngine(OSystem *syst, Engine **engine, const ADGameDescription *desc) override {

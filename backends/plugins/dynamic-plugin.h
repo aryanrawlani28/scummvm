@@ -111,22 +111,29 @@ public:
 		return _filename.c_str();
 	}
 
-	virtual bool createInstanceOfMetaEngine(OSystem *syst, Engine **engine) override {
-		typedef bool (*BoolFunc)(OSystem *syst, Engine **engine);
+	virtual Common::Error createInstanceOfMetaEngine(OSystem *syst, Engine **engine) override {
+		typedef Common::Error (*ErrorFunc)(OSystem *syst, Engine **engine);
 
-		BoolFunc createInstanceFunc = (BoolFunc)findSymbol("createInstance");
+		ErrorFunc createInstanceFunc = (ErrorFunc)findSymbol("createInstance");
 
 		if (createInstanceFunc) {
-			warning("DynamicPlugins: Creating Instance of required game.");
-			createInstanceFunc(syst, engine);
-			warning("DynamicPlugins: Engine instance created...");
+			Common::Error tryInstantiateEngineFuncError;
 
-			return true;
+			warning("DynamicPlugins: Creating Instance of required game.");
+			tryInstantiateEngineFuncError = createInstanceFunc(syst, engine);
+
+			if (tryInstantiateEngineFuncError.getCode() == Common::kNoError) {
+				warning("DynamicPlugins: Engine instance created...");
+			} else {
+				warning("DynamicPlugins: Engine instantiation failed...");
+			}
+
+			return tryInstantiateEngineFuncError;
 		} else {
 			warning("DynamicPlugins: Couldn't find a plugin for this. Games will not run until you have the necessary plugins.");
 		}
 
-		return false;
+		return Common::Error();
 	}
 
 	virtual bool createInstanceOfAdvancedMetaEngine(OSystem *syst, Engine **engine, const ADGameDescription *desc) override {
