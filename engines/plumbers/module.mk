@@ -3,7 +3,7 @@ MODULE := engines/plumbers
 MODULE_OBJS = \
 	plumbers.o \
 	console.o \
-	detection.o
+	metaengine.o
 
 # This module can be built as a plugin
 ifeq ($(ENABLE_PLUMBERS), DYNAMIC_PLUGIN)
@@ -14,4 +14,4 @@ endif
 include $(srcdir)/rules.mk
 
 # Detection files
-DETECT_OBJS += $(MODULE)/detection-static.o
+DETECT_OBJS += $(MODULE)/detection.o

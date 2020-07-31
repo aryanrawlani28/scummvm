@@ -20,26 +20,63 @@
  *
  */
 
-#include "plumbers/plumbers.h"
 
-#include "plumbers/detection-static.h"
+#include "plumbers/detection.h"
+
+static const PlainGameDescriptor plumbersGames[] = {
+	{"plumbers", "Plumbers Don't Wear Ties!"},
+	{0, 0}
+};
 
 namespace Plumbers {
-const char *PlumbersGame::getGameId() const { return _gameDescription->gameId; }
-Common::Platform PlumbersGame::getPlatform() const { return _gameDescription->platform; }
+
+static const ADGameDescription gameDescriptions[] = {
+	// Plumbers PC version
+	{
+		"plumbers",
+		0,
+		AD_ENTRY1s("GAME.BIN", 0, 41622),
+		Common::EN_ANY,
+		Common::kPlatformWindows,
+		ADGF_NO_FLAGS,
+		GUIO1(GUIO_NOMIDI)
+	},
+
+	/*
+	// Plumbers 3DO version
+	{
+		"plumbers",
+		0,
+		AD_ENTRY1s("launchme", 0, 143300),
+		Common::EN_ANY,
+		Common::kPlatform3DO,
+		ADGF_UNSTABLE,
+		GUIO1(GUIO_NOMIDI)
+	},
+	*/
+
+	AD_TABLE_END_MARKER
+};
+
+} // End of namespace Plumbers
+
+PlumbersMetaEngine::PlumbersMetaEngine() : AdvancedMetaEngine(Plumbers::gameDescriptions, sizeof(ADGameDescription), plumbersGames) {
 }
 
-#if PLUGIN_ENABLED_DYNAMIC(PLUMBERS)
-extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
-#else
-bool PlumbersMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
-#endif
-	if (desc)
-		*engine = new Plumbers::PlumbersGame(syst, desc);
-
-	return desc != nullptr;
+const char *PlumbersMetaEngine::getEngineId() const {
+	return "plumbers";
 }
 
-#if PLUGIN_ENABLED_DYNAMIC(PLUMBERS)
-REGISTER_PLUGIN_ENGINE_DYNAMIC(PLUMBERS, PLUGIN_TYPE_ENGINE);
-#endif
+const char *PlumbersMetaEngine::getName() const {
+	return "Plumbers Don't Wear Ties";
+}
+
+const char *PlumbersMetaEngine::getOriginalCopyright() const {
+	return "Plumbers Don't Wear Ties (C) 1993-94 Kirin Entertainment";
+}
+
+bool PlumbersMetaEngine::hasFeature(MetaEngineFeature f) const {
+	return false;
+}
+
+REGISTER_PLUGIN_STATIC(PLUMBERS, PLUGIN_TYPE_METAENGINE, PlumbersMetaEngine);
