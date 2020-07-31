@@ -5,7 +5,7 @@ MODULE_OBJS := \
 	checks.o \
 	console.o \
 	cycle.o \
-	detection.o \
+	metaengine.o \
 	font.o \
 	global.o \
 	graphics.o \
@@ -51,5 +51,5 @@ endif
 include $(srcdir)/rules.mk
 
 # Detection files
-DETECT_OBJS += $(MODULE)/detection-static.o
+DETECT_OBJS += $(MODULE)/detection.o
 DETECT_OBJS += $(MODULE)/wagparser.o
