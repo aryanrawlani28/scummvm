@@ -28,10 +28,6 @@ namespace DreamWeb {
 #define GAMEOPTION_ORIGINAL_SAVELOAD GUIO_GAMEOPTIONS1
 #define GAMEOPTION_BRIGHTPALETTE     GUIO_GAMEOPTIONS2
 
-struct DreamWebGameDescription {
-	ADGameDescription desc;
-};
-
 static const DreamWebGameDescription gameDescriptions[] = {
 	// International floppy release
 	{
