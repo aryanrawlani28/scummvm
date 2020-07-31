@@ -20,49 +20,94 @@
  *
  */
 
-#include "lure/detection-static.h"
+#include "lure/detection.h"
 
-namespace Lure {
+LureMetaEngine::LureMetaEngine() : AdvancedMetaEngine(Lure::gameDescriptions, sizeof(Lure::LureGameDescription), lureGames
+#ifdef USE_TTS
+        , optionsList
+#endif
+        ) {
+    _md5Bytes = 1024;
 
-uint32 LureEngine::getFeatures() const { return _gameDescription->features; }
-Common::Language LureEngine::getLanguage() const { return _gameDescription->desc.language; }
-Common::Platform LureEngine::getPlatform() const { return _gameDescription->desc.platform; }
-
-LureLanguage LureEngine::getLureLanguage() const {
-	switch (_gameDescription->desc.language) {
-	case Common::IT_ITA: return LANG_IT_ITA;
-	case Common::FR_FRA: return LANG_FR_FRA;
-	case Common::DE_DEU: return LANG_DE_DEU;
-	case Common::ES_ESP: return LANG_ES_ESP;
-	case Common::RU_RUS: return LANG_RU_RUS;
-	case Common::EN_ANY: return LANG_EN_ANY;
-	case Common::UNK_LANG: return LANG_UNKNOWN;
-	default:
-		error("Unknown game language");
-	}
+    // Use kADFlagUseExtraAsHint to distinguish between EGA and VGA versions
+    // of italian Lure when their datafiles sit in the same directory.
+    _flags = kADFlagUseExtraAsHint;
+    _guiOptions = GUIO1(GUIO_NOSPEECH);
 }
 
-} // End of namespace Lure
+const char *LureMetaEngine::getEngineId() const {
+    return "lure";
+}
 
-bool Lure::LureEngine::hasFeature(EngineFeature f) const {
+const char *LureMetaEngine::getName() const {
+    return "Lure of the Temptress";
+}
+
+const char *LureMetaEngine::getOriginalCopyright() const {
+    return "Lure of the Temptress (C) Revolution";
+}
+
+bool LureMetaEngine::hasFeature(MetaEngineFeature f) const {
 	return
-		(f == kSupportsReturnToLauncher) ||
-		(f == kSupportsLoadingDuringRuntime) ||
-		(f == kSupportsSavingDuringRuntime);
+		(f == kSupportsListSaves) ||
+		(f == kSupportsLoadingDuringStartup) ||
+		(f == kSupportsDeleteSave);
 }
 
-#if PLUGIN_ENABLED_DYNAMIC(LURE)
-extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
-#else
-bool LureMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
-#endif
-	const Lure::LureGameDescription *gd = (const Lure::LureGameDescription *)desc;
-	if (gd) {
-		*engine = new Lure::LureEngine(syst, gd);
+int LureMetaEngine::getMaximumSaveSlot() const { return 999; }
+
+void LureMetaEngine::removeSaveState(const char *target, int slot) const {
+	Common::String filename = target;
+	filename += Common::String::format(".%03d", slot);
+
+	g_system->getSavefileManager()->removeSavefile(filename);
+}
+
+Common::String getSaveName(Common::InSaveFile *in) {
+	// Check for header
+	char saveName[MAX_DESC_SIZE];
+	char buffer[5];
+	in->read(&buffer[0], 5);
+	if (memcmp(&buffer[0], "lure", 5) == 0) {
+		// Check language version
+		in->readByte();
+		in->readByte();
+		char *p = saveName;
+		int decCtr = MAX_DESC_SIZE - 1;
+		while ((decCtr > 0) && ((*p++ = in->readByte()) != 0)) --decCtr;
+		*p = '\0';
+
 	}
-	return gd != 0;
+
+	return Common::String(saveName);
 }
 
-#if PLUGIN_ENABLED_DYNAMIC(LURE)
-	REGISTER_PLUGIN_ENGINE_DYNAMIC(LURE, PLUGIN_TYPE_ENGINE);
-#endif
+SaveStateList LureMetaEngine::listSaves(const char *target) const {
+	Common::SaveFileManager *saveFileMan = g_system->getSavefileManager();
+	Common::StringArray filenames;
+	Common::String saveDesc;
+	Common::String pattern = "lure.###";
+
+	filenames = saveFileMan->listSavefiles(pattern);
+
+	SaveStateList saveList;
+	for (Common::StringArray::const_iterator file = filenames.begin(); file != filenames.end(); ++file) {
+		// Obtain the last 3 digits of the filename, since they correspond to the save slot
+		int slotNum = atoi(file->c_str() + file->size() - 3);
+
+		if (slotNum >= 0 && slotNum <= 999) {
+			Common::InSaveFile *in = saveFileMan->openForLoading(*file);
+			if (in) {
+				saveDesc = getSaveName(in);
+				saveList.push_back(SaveStateDescriptor(slotNum, saveDesc));
+				delete in;
+			}
+		}
+	}
+
+	// Sort saves based on slot number.
+	Common::sort(saveList.begin(), saveList.end(), SaveStateDescriptorSlotComparator());
+	return saveList;
+}
+
+REGISTER_PLUGIN_STATIC(LURE, PLUGIN_TYPE_METAENGINE, LureMetaEngine);

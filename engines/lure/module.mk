@@ -4,7 +4,7 @@ MODULE_OBJS := \
 	animseq.o \
 	debugger.o \
 	decode.o \
-	detection.o \
+	metaengine.o \
 	disk.o \
 	events.o \
 	fights.o \
@@ -33,4 +33,4 @@ endif
 include $(srcdir)/rules.mk
 
 # Detection objects
-DETECT_OBJS += $(MODULE)/detection-static.o
+DETECT_OBJS += $(MODULE)/detection.o
