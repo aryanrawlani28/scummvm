@@ -61,17 +61,9 @@ class AgiMetaEngine : public AdvancedMetaEngine {
 public:
 	AgiMetaEngine();
 
-	const char *getEngineId() const override {
-		return "agi";
-	}
-
-	const char *getName() const override {
-		return "AGI preAGI + v2 + v3";
-	}
-
-	const char *getOriginalCopyright() const override {
-		return "Sierra AGI Engine (C) Sierra On-Line Software";
-	}
+	const char *getEngineId() const override;
+	const char *getName() const override;
+	const char *getOriginalCopyright() const override;
 
 	bool hasFeature(MetaEngineFeature f) const override;
 #if PLUGIN_ENABLED_STATIC(AGI)

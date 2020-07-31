@@ -117,6 +117,18 @@ AgiMetaEngine::AgiMetaEngine() : AdvancedMetaEngine(Agi::gameDescriptions, sizeo
 	_guiOptions = GUIO1(GUIO_NOSPEECH);
 }
 
+const char *AgiMetaEngine::getEngineId() const {
+	return "agi";
+}
+
+const char *AgiMetaEngine::getName() const {
+	return "AGI preAGI + v2 + v3";
+}
+
+const char *AgiMetaEngine::getOriginalCopyright() const {
+	return "Sierra AGI Engine (C) Sierra On-Line Software";
+}
+
 bool AgiMetaEngine::hasFeature(MetaEngineFeature f) const {
 	return
 	    (f == kSupportsListSaves) ||
