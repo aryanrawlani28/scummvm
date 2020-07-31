@@ -5,7 +5,7 @@ MODULE_OBJS := \
 	animation.o \
 	console.o \
 	converse.o \
-	detection.o \
+	metaengine.o \
 	drascula.o \
 	graphics.o \
 	interface.o \
@@ -27,4 +27,4 @@ endif
 include $(srcdir)/rules.mk
 
 # Detection objects
-DETECT_OBJS += $(MODULE)/detection-static.o
+DETECT_OBJS += $(MODULE)/detection.o
