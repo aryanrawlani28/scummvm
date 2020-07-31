@@ -136,8 +136,12 @@ public:
 	 * @param engine	Pointer to a pointer which the MetaEngine sets to
 	 *					the newly create Engine, or 0 in case of an error
 	 * @return		a Common::Error describing the error which occurred, or kNoError
+	 *
+	 * @note Only overriden for Static-type plugins. For Dynamic-type plugins,
+	 * 		 they are defined as a non-member function, and exported as a symbol,
+	 * 		 which is then located from here (the default implementation) of ME.
 	 */
-	virtual Common::Error createInstance(OSystem *syst, Engine **engine) const = 0;
+	virtual Common::Error createInstance(OSystem *syst, Engine **engine) const;
 
 	/**
 	 * Return a list of all save states associated with the given target.

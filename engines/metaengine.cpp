@@ -26,6 +26,7 @@
 #include "backends/keymapper/keymap.h"
 #include "backends/keymapper/standard-actions.h"
 
+#include "common/error.h"
 #include "common/savefile.h"
 #include "common/system.h"
 #include "common/translation.h"
@@ -267,6 +268,38 @@ WARN_UNUSED_RESULT bool MetaEngine::readSavegameHeader(Common::InSaveFile *in, E
 ///////////////////////////////////////
 // MetaEngine default implementations
 ///////////////////////////////////////
+
+Common::Error MetaEngine::createInstance(OSystem *syst, Engine **engine) const {
+#ifdef DYNAMIC_MODULES
+	PluginList pl = PluginMan.getPlugins(PLUGIN_TYPE_ENGINE);
+	Plugin *plugin = nullptr;
+
+	// By this point of time, all engines will be unloaded
+	// and we'll only have the one we actually need in memory.
+	if (pl.size() == 1) {
+		plugin = pl[0];
+	} else {
+		warning("Multiple engine plugins loaded in memory. Didn't find which one to match.");
+	}
+
+	Common::Error gameTryLaunchDynamicError;
+
+	if (plugin && plugin->getFileName()) {
+		gameTryLaunchDynamicError = plugin->createInstanceOfMetaEngine(syst, engine);
+
+		if (gameTryLaunchDynamicError.getCode() == Common::kNoError) {
+			warning("ME: Plugin loaded, and engine instantiated successfully.");
+		} else {
+			warning("ME: Plugin loaded, but couldn't instantiate the engine.");
+		}
+	} else {
+		warning("ME: No plugin found.");
+	}
+
+	return gameTryLaunchDynamicError;
+#endif
+	return Common::Error();
+}
 
 SaveStateList MetaEngine::listSaves(const char *target) const {
 	if (!hasFeature(kSavesUseExtendedFormat))
