@@ -171,9 +171,6 @@ private:
 	const ADGameDescription *_desc;
 };
 
-WARN_UNUSED_RESULT bool readSaveHeader(Common::InSaveFile &in, SaveStateDescriptor &desc, bool skipThumbnail = true);
-Common::String generateSaveName(int slot, const char *gameId);
-
 } // End of namespace Pink
 
 #endif

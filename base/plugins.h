@@ -138,7 +138,7 @@ extern int pluginTypeVersions[PLUGIN_TYPE_MAX];
 #endif // DYNAMIC_MODULES
 
 
-#ifdef DYNAMIC_MODULES
+#ifndef DYNAMIC_MODULES
 
 /**
  * REGISTER_PLUGIN_ENGINE_DYNAMIC is a convenience macro that declares
@@ -161,6 +161,32 @@ extern int pluginTypeVersions[PLUGIN_TYPE_MAX];
 		PLUGIN_EXPORT int32 PLUGIN_getTypeVersion() { return TYPE##_VERSION; } \
 	} \
 	void dummyFuncToAllowTrailingSemicolon()
+
+
+/**
+ * Small macros to help with writing the engine code.
+ */
+
+#define CREATE_INSTANCE_PLUGIN_ME \
+	extern "C" PLUGIN_EXPORT Common::Error createInstance(OSystem *syst, Engine **engine)
+
+#define CREATE_INSTANCE_PLUGIN \
+	extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc)
+
+
+#define PLUGIN_CREATE_INSTANCE(ID,METAENGINE) MY_NEW_MACRO
+
+#if PLUGIN_ENABLED_DYNAMIC(ID)
+
+#undef PLUGIN_CREATE_INSTANCE
+#define PLUGIN_CREATE_INSTANCE \
+	extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc)
+
+#else
+#define MYMETAENGINE METAENGINE
+#undef PLUGIN_CREATE_INSTANCE
+#define PLUGIN_CREATE_INSTANCE \
+	bool MYMETAENGINE::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const
 
 #endif // DYNAMIC_MODULES
 

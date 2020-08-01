@@ -48,8 +48,6 @@ struct Compact;
 struct DataFileHeader;
 struct MegaSet;
 
-#define MAX_SAVE_GAMES  999
-#define MAX_TEXT_LEN     80
 #define PAN_LINE_WIDTH  184
 #define PAN_CHAR_HEIGHT  12
 #define STATUS_WIDTH    146

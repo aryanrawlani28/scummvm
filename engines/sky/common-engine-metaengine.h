@@ -20,28 +20,32 @@
  *
  */
 
-#include "pink/pink.h"
-#include "pink/detection-static.h"
+/**
+ * Some common code for Engine & MetaEngine.
+ */
 
-namespace Pink {
+#ifndef SKY_COMMON_ENGINE_METAENGINE_H
+#define SKY_COMMON_ENGINE_METAENGINE_H
 
-Common::Language PinkEngine::getLanguage() const {
-	return _desc->language;
-}
+#define MAX_SAVE_GAMES  999
+#define MAX_TEXT_LEN     80
 
-} // End of Namespace Pink
+namespace Sky {
 
-#if PLUGIN_ENABLED_DYNAMIC(PINK)
-extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
-#else
-bool PinkMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
-#endif
-	if (desc)
-		*engine = new Pink::PinkEngine(syst, desc);
+enum SkyAction {
+	kSkyActionNone,
+	kSkyActionToggleFastMode,
+	kSkyActionToggleReallyFastMode,
+	kSkyActionOpenControlPanel,
+	kSkyActionConfirm,
+	kSkyActionSkip,
+	kSkyActionSkipLine,
+	kSkyActionPause
+};
 
-	return desc != 0;
-}
+// This was orignally a class member for the SkyEngine.
+static const char *shortcutsKeymapId = "sky-shortcuts";
 
-#if PLUGIN_ENABLED_DYNAMIC(PINK)
-REGISTER_PLUGIN_ENGINE_DYNAMIC(PINK, PLUGIN_TYPE_ENGINE);
+} // End of namespace Sky
+
 #endif

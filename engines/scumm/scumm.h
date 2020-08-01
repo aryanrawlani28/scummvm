@@ -43,6 +43,10 @@
 #include "scumm/detection.h"
 #include "scumm/script.h"
 
+// Some things common between engine and metaengine, like
+// some structs.
+#include "scumm/common-engine-metaengine.h"
+
 #ifdef __DS__
 /* This disables the dual layer mode which is used in FM-Towns versions
  * of SCUMM games and which emulates the behavior of the original code.
@@ -315,12 +319,6 @@ enum WhereIsObject {
 	WIO_GLOBAL = 2,
 	WIO_LOCAL = 3,
 	WIO_FLOBJECT = 4
-};
-
-struct SaveStateMetaInfos {
-	uint32 date;
-	uint16 time;
-	uint32 playtime;
 };
 
 enum UserStates {

@@ -20,28 +20,22 @@
  *
  */
 
-#include "pink/pink.h"
-#include "pink/detection-static.h"
+#include "engines/advancedDetector.h"
 
-namespace Pink {
+class PinkMetaEngine : public AdvancedMetaEngine {
+public:
+	PinkMetaEngine();
 
-Common::Language PinkEngine::getLanguage() const {
-	return _desc->language;
-}
+	const char *getEngineId() const override;
+	const char *getName() const override;
+	const char *getOriginalCopyright() const override;
 
-} // End of Namespace Pink
-
-#if PLUGIN_ENABLED_DYNAMIC(PINK)
-extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
-#else
-bool PinkMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
+	bool hasFeature(MetaEngineFeature f) const override;
+	int getMaximumSaveSlot() const override { return 99; }
+	SaveStateList listSaves(const char *target) const override;
+	void removeSaveState(const char *target, int slot) const override;
+	SaveStateDescriptor querySaveMetaInfos(const char *target, int slot) const override;
+#if PLUGIN_ENABLED_STATIC(PINK)
+	bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const override;
 #endif
-	if (desc)
-		*engine = new Pink::PinkEngine(syst, desc);
-
-	return desc != 0;
-}
-
-#if PLUGIN_ENABLED_DYNAMIC(PINK)
-REGISTER_PLUGIN_ENGINE_DYNAMIC(PINK, PLUGIN_TYPE_ENGINE);
-#endif
+};

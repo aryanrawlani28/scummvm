@@ -128,54 +128,6 @@ public:
 	virtual DetectedGames detectGames(const Common::FSList &fslist) const = 0;
 
 	/**
-	 * Tries to instantiate an engine instance based on the settings of
-	 * the currently active ConfMan target. That is, the MetaEngine should
-	 * query the ConfMan singleton for the target, gameid, path etc. data.
-	 *
-	 * @param syst	Pointer to the global OSystem object
-	 * @param engine	Pointer to a pointer which the MetaEngine sets to
-	 *					the newly create Engine, or 0 in case of an error
-	 * @return		a Common::Error describing the error which occurred, or kNoError
-	 *
-	 * @note Only overriden for Static-type plugins. For Dynamic-type plugins,
-	 * 		 they are defined as a non-member function, and exported as a symbol,
-	 * 		 which is then located from here (the default implementation) of ME.
-	 */
-	virtual Common::Error createInstance(OSystem *syst, Engine **engine) const;
-
-	/**
-	 * Return a list of all save states associated with the given target.
-	 *
-	 * The returned list is guaranteed to be sorted by slot numbers. That
-	 * means smaller slot numbers are always stored before bigger slot numbers.
-	 *
-	 * The caller has to ensure that this (Meta)Engine is responsible
-	 * for the specified target (by using findGame on it respectively
-	 * on the associated gameid from the relevant ConfMan entry, if present).
-	 *
-	 * The default implementation returns an empty list.
-	 *
-	 * @note MetaEngines must indicate that this function has been implemented
-	 *       via the kSupportsListSaves feature flag.
-	 *
-	 * @param target	name of a config manager target
-	 * @return			a list of save state descriptors
-	 */
-	virtual SaveStateList listSaves(const char *target) const;
-
-	/**
-	 * Return a list of all save states associated with the given target.
-	 *
-	 * This is a wrapper around the basic listSaves virtual method, but which
-	 * has some extra logic for autosave handling
-	 *
-	 * @param target	name of a config manager target
-	 * @param saveMode	If true, getting the list for a save dialog
-	 * @return			a list of save state descriptors
-	 */
-	SaveStateList listSaves(const char *target, bool saveMode) const;
-
-	/**
 	 * Returns the slot number being used for autosaves.
 	 * @note	This should match the engine getAutosaveSlot() method
 	 */
@@ -397,6 +349,57 @@ public:
 
 	//@}
 };
+
+
+class MetaEngineDynamic : public PluginObject {
+	/**
+	 * Tries to instantiate an engine instance based on the settings of
+	 * the currently active ConfMan target. That is, the MetaEngine should
+	 * query the ConfMan singleton for the target, gameid, path etc. data.
+	 *
+	 * @param syst	Pointer to the global OSystem object
+	 * @param engine	Pointer to a pointer which the MetaEngine sets to
+	 *					the newly create Engine, or 0 in case of an error
+	 * @return		a Common::Error describing the error which occurred, or kNoError
+	 *
+	 * @note Only overriden for Static-type plugins. For Dynamic-type plugins,
+	 * 		 they are defined as a non-member function, and exported as a symbol,
+	 * 		 which is then located from here (the default implementation) of ME.
+	 */
+	virtual Common::Error createInstance(OSystem *syst, Engine **engine) const;
+
+	/**
+	 * Return a list of all save states associated with the given target.
+	 *
+	 * The returned list is guaranteed to be sorted by slot numbers. That
+	 * means smaller slot numbers are always stored before bigger slot numbers.
+	 *
+	 * The caller has to ensure that this (Meta)Engine is responsible
+	 * for the specified target (by using findGame on it respectively
+	 * on the associated gameid from the relevant ConfMan entry, if present).
+	 *
+	 * The default implementation returns an empty list.
+	 *
+	 * @note MetaEngines must indicate that this function has been implemented
+	 *       via the kSupportsListSaves feature flag.
+	 *
+	 * @param target	name of a config manager target
+	 * @return			a list of save state descriptors
+	 */
+	virtual SaveStateList listSaves(const char *target) const;
+
+	/**
+	 * Return a list of all save states associated with the given target.
+	 *
+	 * This is a wrapper around the basic listSaves virtual method, but which
+	 * has some extra logic for autosave handling
+	 *
+	 * @param target	name of a config manager target
+	 * @param saveMode	If true, getting the list for a save dialog
+	 * @return			a list of save state descriptors
+	 */
+	SaveStateList listSaves(const char *target, bool saveMode) const;
+}
 
 /**
  * Singleton class which manages all Engine plugins.

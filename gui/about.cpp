@@ -92,6 +92,18 @@ AboutDialog::AboutDialog()
 
 	int i;
 
+	PluginList pl = EngineMan.getPlugins(PLUGIN_TYPE_ENGINE);
+	debug("\nEngines in memory: ");
+	for (PluginList::const_iterator itr = pl.begin(); itr != pl.end(); itr++) {
+		debug("- %s", (*itr)->getFileName());
+	}
+
+	PluginList pl2 = EngineMan.getPlugins(PLUGIN_TYPE_METAENGINE);
+	debug("\nMetaEngines in memory: ");
+	for (PluginList::const_iterator itr = pl2.begin(); itr != pl2.end(); itr++) {
+		debug("- %s", (*itr)->getName());
+	}
+
 	for (i = 0; i < 1; i++)
 		_lines.push_back("");
 

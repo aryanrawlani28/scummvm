@@ -20,28 +20,13 @@
  *
  */
 
-#include "pink/pink.h"
-#include "pink/detection-static.h"
 
-namespace Pink {
+namespace Scumm {
 
-Common::Language PinkEngine::getLanguage() const {
-	return _desc->language;
+struct SaveStateMetaInfos {
+	uint32 date;
+	uint16 time;
+	uint32 playtime;
+};
+
 }
-
-} // End of Namespace Pink
-
-#if PLUGIN_ENABLED_DYNAMIC(PINK)
-extern "C" PLUGIN_EXPORT bool createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) {
-#else
-bool PinkMetaEngine::createInstance(OSystem *syst, Engine **engine, const ADGameDescription *desc) const {
-#endif
-	if (desc)
-		*engine = new Pink::PinkEngine(syst, desc);
-
-	return desc != 0;
-}
-
-#if PLUGIN_ENABLED_DYNAMIC(PINK)
-REGISTER_PLUGIN_ENGINE_DYNAMIC(PINK, PLUGIN_TYPE_ENGINE);
-#endif

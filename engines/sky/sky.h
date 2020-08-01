@@ -28,6 +28,8 @@
 #include "common/keyboard.h"
 #include "engines/engine.h"
 
+#include "sky/common-engine-metaengine.h"
+
 /**
  * This is the namespace of the Sky engine.
  *
@@ -60,17 +62,6 @@ class Control;
 class MusicBase;
 class Debugger;
 class SkyCompact;
-
-enum SkyAction {
-	kSkyActionNone,
-	kSkyActionToggleFastMode,
-	kSkyActionToggleReallyFastMode,
-	kSkyActionOpenControlPanel,
-	kSkyActionConfirm,
-	kSkyActionSkip,
-	kSkyActionSkipLine,
-	kSkyActionPause
-};
 
 class SkyEngine : public Engine {
 protected:

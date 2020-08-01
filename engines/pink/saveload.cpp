@@ -22,10 +22,9 @@
 
 #include "common/system.h"
 
-#include "graphics/thumbnail.h"
-
 #include "pink/pink.h"
 #include "pink/objects/module.h"
+#include "pink/saveload.h" // For readsaveheader and generateSaveName.
 
 namespace Pink {
 
@@ -80,39 +79,6 @@ Common::Error PinkEngine::saveGameState(int slot, const Common::String &desc, bo
 	delete out;
 
 	return Common::kNoError;
-}
-
-Common::String generateSaveName(int slot, const char *gameId) {
-	return Common::String::format("%s.s%02d", gameId, slot);
-}
-
-WARN_UNUSED_RESULT bool readSaveHeader(Common::InSaveFile &in, SaveStateDescriptor &desc, bool skipThumbnail) {
-	if (in.readUint32BE() != MKTAG('p', 'i', 'n', 'k'))
-		return false;
-
-	const Common::String description = in.readPascalString();
-	uint32 date = in.readUint32LE();
-	uint16 time = in.readUint16LE();
-	uint32 playTime = in.readUint32LE();
-
-	Graphics::Surface *thumbnail = nullptr;
-	if (!Graphics::loadThumbnail(in, thumbnail, skipThumbnail))
-		return false;
-
-	int day = (date >> 24) & 0xFF;
-	int month = (date >> 16) & 0xFF;
-	int year = date & 0xFFFF;
-
-	int hour = (time >> 8) & 0xFF;
-	int minutes = time & 0xFF;
-
-	desc.setSaveDate(year, month, day);
-	desc.setSaveTime(hour, minutes);
-	desc.setPlayTime(playTime * 1000);
-	desc.setDescription(description);
-	desc.setThumbnail(thumbnail);
-
-	return true;
 }
 
 }

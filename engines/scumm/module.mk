@@ -14,9 +14,10 @@ MODULE_OBJS := \
 	cursor.o \
 	debugger.o \
 	detection.o \
-	dialogs.o \
+	detection-static.o \
 	file.o \
 	file_nes.o \
+	dialogs.o \
 	gfx_towns.o \
 	gfx.o \
 	he/resource_he.o \
@@ -167,3 +168,8 @@ endif
 
 # Include common rules
 include $(srcdir)/rules.mk
+
+# Detection objects
+DETECT_OBJS += $(MODULE)/detection-static.o
+DETECT_OBJS += $(MODULE)/file.o
+DETECT_OBJS += $(MODULE)/file_nes.o
